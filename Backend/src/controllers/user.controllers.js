@@ -1,8 +1,8 @@
 import express from "express"
-import { asyncHandler } from "../utils/asyncHandler"
-import { apiError } from "../utils/apiError"
-import {apiResponse} from "../utils/apiResponse.js"
-import { User } from "../model/user.model"
+import { asyncHandler } from "../utils/asyncHandler.js"
+import { apiError } from "../utils/apiError.js"
+import apiResponse from "../utils/apiResponse.js"
+import { User } from "../model/user.model.js"
 
 
 
@@ -21,7 +21,6 @@ const signUp=asyncHandler(async(req,res)=>{
     if(!emailRegex.test(email)){
         throw new apiError(400,"Invalid email")
     }
-
     const existedUser= await User.findOne({
         email
     })
@@ -29,10 +28,19 @@ const signUp=asyncHandler(async(req,res)=>{
         throw new apiError(400,"Email exist!!!")
     }
 
+    const avatarLocalpath=req?.files?.avatar?.[0]?.path
+    if(!avatarLocalpath){
+        throw new apiError(400,"Avatar file path not found")
+    }
+    const avatar=await uploadOnCloudinary(avatarLocalpath)
+
+   
+
     const user= await User.create({
     fullName,
     email,
-    password
+    password,
+    avatar:avatar.url
 })
 
 const createduser=await User.findById(user._id).select(

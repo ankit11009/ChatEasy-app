@@ -1,6 +1,6 @@
 import express from 'express'
 import dotenv from 'dotenv'
-import authRouter from "./routes/auth.routes.js"
+
 import messageRouter from "./routes/message.routes.js"
 import connectDB from './db/index.js'
 
@@ -17,7 +17,7 @@ dotenv.config()
 
 
 
-// app.use("/api/auth",authRouter)
+
 // app.use("/api/message",messageRouter)
 
 const PORT=process.env.PORT
