@@ -2,6 +2,7 @@ import express from "express"
 import authRouter from "./routes/auth.routes.js"
 import dotenv from "dotenv"
 import cors from "cors"
+import cookieParser from "cookie-parser"
 
 
 const app=express()
@@ -13,12 +14,15 @@ app.use(cors({
 }))
 
 
-app.use(express.json) // req.body
+app.use(express.json()) // req.body
+app.use(express.urlencoded({limit:"16kb",credentials:true}))
+app.use(express.static("public"))
+app.use(cookieParser())
 
 
 
 
-app.use("/api/auth/users",authRouter)
+app.use("/api/v1/auth",authRouter)
 
 
 

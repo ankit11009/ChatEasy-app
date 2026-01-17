@@ -3,13 +3,14 @@ import { asyncHandler } from "../utils/asyncHandler.js"
 import { apiError } from "../utils/apiError.js"
 import apiResponse from "../utils/apiResponse.js"
 import { User } from "../model/user.model.js"
+import { uploadOnCloudinary } from "../utils/cloudinary.js"
 
 
 
 const signUp=asyncHandler(async(req,res)=>{
-    const {userName,email,password}=req.body
+    const {fullName,email,password}=req.body
 
-    if(!(userName || email || password)){
+    if(!fullName || !email || !password){
         throw new apiError(400,"All feilds are required!!!")
     }
     if(password.lenght<6){
@@ -28,11 +29,16 @@ const signUp=asyncHandler(async(req,res)=>{
         throw new apiError(400,"Email exist!!!")
     }
 
-    const avatarLocalpath=req?.files?.avatar?.[0]?.path
+    const avatarLocalpath=req.files?.avatar?.[0]?.path
     if(!avatarLocalpath){
         throw new apiError(400,"Avatar file path not found")
     }
+    console.log(avatarLocalpath);
+    
     const avatar=await uploadOnCloudinary(avatarLocalpath)
+    if(!avatar){
+        throw new apiError(400,"Avatar not uploaded successfully")
+    }
 
    
 
@@ -40,7 +46,7 @@ const signUp=asyncHandler(async(req,res)=>{
     fullName,
     email,
     password,
-    avatar:avatar.url
+    avatar:avatar.url,
 })
 
 const createduser=await User.findById(user._id).select(
