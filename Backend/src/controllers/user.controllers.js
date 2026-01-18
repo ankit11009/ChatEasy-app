@@ -4,6 +4,8 @@ import { apiError } from "../utils/apiError.js"
 import apiResponse from "../utils/apiResponse.js"
 import { User } from "../model/user.model.js"
 import { uploadOnCloudinary } from "../utils/cloudinary.js"
+import { sendWelcomeEmail } from "../emails/emailHandlers.js"
+import 'dotenv/config'
 
 
 
@@ -13,7 +15,7 @@ const signUp=asyncHandler(async(req,res)=>{
     if(!fullName || !email || !password){
         throw new apiError(400,"All feilds are required!!!")
     }
-    if(password.lenght<6){
+    if(password.length<6){
         throw new apiError(400,"Password must be of 6 charachters")
     }
 
@@ -52,6 +54,11 @@ const signUp=asyncHandler(async(req,res)=>{
 const createduser=await User.findById(user._id).select(
     "-password -refreshToken"
 )
+try {
+    await sendWelcomeEmail(user.email,user.fullName,process.env.CLIENT_URL)
+} catch (error) {
+    console.log("Failed to send email",error)
+}
 
 return res.status(200).
 json(
@@ -61,9 +68,14 @@ json(
         "User Registered successfully"
     )
 )
+
+//calling function sendWelcomeEmail to send email
+
+
+
 })
 
 export {
     signUp,
 
-}
+} 
