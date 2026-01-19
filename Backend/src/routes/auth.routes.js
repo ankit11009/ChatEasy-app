@@ -2,7 +2,8 @@ import express from 'express'
 import { Router } from 'express'
 import { signUp,
         userLogin,
-        userLogout
+        userLogout,
+        updateUserDeatils
  } from '../controllers/user.controllers.js'
 import { upload } from '../middleware/multer.middleware.js'
 import {verifyJWT} from '../middleware/auth.middleware.js'
@@ -25,6 +26,7 @@ router.route("/signUp").post(
 )
 router.route("/login").post(userLogin)
 router.route("/logout").post(verifyJWT,userLogout)
+router.route("/update").patch(verifyJWT,updateUserDeatils)
 
 
 

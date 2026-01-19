@@ -168,10 +168,43 @@ const userLogout=asyncHandler(async(req,res)=>{
         ))
 
 })
+
+const updateUserDeatils=asyncHandler(async(req,res)=>{
+    const {fullName,email,password}=req.body
+    if(!fullName || !username || !password){
+        throw new apiError(400,"Invalid credentials")
+    }
+    const user=await User.findByIdAndUpdate(
+        req.user?._id,
+        {
+            $set:{
+                fullName,
+                email,
+                password,
+            }
+        
+        },
+        {
+            $new:true
+        }
+
+    ).select("-password")
+
+
+    return res.status(200).
+    json(
+        new apiResponse(
+            200,
+            user,
+            "Account details updated successfully"
+        )
+    )
+})
 export {
     signUp,
     userLogin,
-    userLogout
+    userLogout,
+    updateUserDeatils
     
 
 } 
