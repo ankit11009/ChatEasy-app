@@ -1,8 +1,8 @@
-import { asyncHandler } from "../utlis/asyncHandler.js";
+import { asyncHandler } from "../utils/asyncHandler.js";
 import jwt from "jsonwebtoken"  
-import {User} from "../models/user.model.js"
-import { apiError } from "../utlis/apiError.js";
-
+import {User} from "../model/user.model.js"
+import { apiError } from "../utils/apiError.js";
+import cookieParser from "cookie-parser";
 export const verifyJWT= asyncHandler(async(req,_,next)=>{
     // taking token acess->req ke pass cookie ka access hai,, cookies have all data and we can acess cookie through cookieParser middleware
     
@@ -13,7 +13,7 @@ export const verifyJWT= asyncHandler(async(req,_,next)=>{
   try{
     // cookies se token le lo ya phir authorization se le lo
       const token=req.cookies?.accessToken || req.header("Authorization")?.replace("Bearer ","")
-      console.log(token);
+      console.log("token:",token);
       
 
     if(!token){

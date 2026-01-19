@@ -1,6 +1,8 @@
 import mongoose from "mongoose";
 import bcrypt from "bcrypt"
-
+import 'dotenv/config'
+import dotenv from 'dotenv'
+import jwt from 'jsonwebtoken'
 
 const userSchema=new mongoose.Schema({
     email:{

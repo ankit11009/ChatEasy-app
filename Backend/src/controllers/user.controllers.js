@@ -9,6 +9,27 @@ import 'dotenv/config'
 
 
 
+const generateAccessTokenAndRefeshToken=async(userId)=>{
+    // console.log("userId:",userId);
+    
+    try {
+        const user=await User.findById(userId)
+        // console.log("user:",user);
+        
+        const accessToken=user.generateAccessToken()
+        // console.log("accessTOken",accessToken);
+        const refreshToken=user.generateRefreshToken()
+        // console.log("accessTOken",accessToken);
+        user.refreshToken=refreshToken
+        await user.save({validateBeforeSave:false})
+        return {accessToken,refreshToken}
+    } catch (error) {
+        throw new apiError(400,"Something went wrong in generating access and refresh token")
+    }
+}
+
+
+
 const signUp=asyncHandler(async(req,res)=>{
     const {fullName,email,password}=req.body
 
@@ -75,7 +96,82 @@ json(
 
 })
 
+
+const userLogin=asyncHandler(async(req,res)=>{
+    const {email,password}=req.body
+    if(!email){
+        throw new apiError(400,"Email is required")
+    }
+
+    const userExicted=await User.findOne({
+        email
+    })
+    if(!userExicted){
+        throw new apiError(400,"Email doesn't exit")
+    }
+
+    const isPasswordCorrect= await userExicted.isPasswordCorrect(password)
+    if(!isPasswordCorrect){
+        throw new apiError(400,"Password is incorrect")
+    }
+
+    const {accessToken,refreshToken}= await generateAccessTokenAndRefeshToken(userExicted._id)
+
+
+    const loggedInUser=await User.findById(userExicted._id).select("-password -refreshToken")
+
+    const options={
+        httpOnly:true,
+        secure:false
+    }
+
+    return res.status(200).
+    cookie("accessToken",accessToken,options).
+    cookie("refreshToken",refreshToken,options).
+    json(
+        new apiResponse(
+            200,
+            {
+                existedUser:loggedInUser,accessToken,refreshToken
+            },
+            "user logged in successfully"
+        )
+    )
+
+})
+
+const userLogout=asyncHandler(async(req,res)=>{
+    const logout=await User.findByIdAndUpdate(
+        req.user._id,
+        {
+            $unset:{
+                refreshToken:1
+            }
+        },
+        {
+            new:true
+        }
+        )
+
+        const options={
+            httpOnly:true,
+            secure:false
+        }
+
+        return res.status(200)
+        .clearCookie("accessToken",options)
+        .clearCookie("refreshToken",options)
+        .json(new apiResponse(
+            200,
+            {},
+            "Logout successfully"
+        ))
+
+})
 export {
     signUp,
+    userLogin,
+    userLogout
+    
 
 } 
