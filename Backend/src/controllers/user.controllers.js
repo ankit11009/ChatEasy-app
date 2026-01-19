@@ -200,11 +200,38 @@ const updateUserDeatils=asyncHandler(async(req,res)=>{
         )
     )
 })
+const updateAvatar=asyncHandler(async(req,res)=>{
+    const avatarLocalPath= req.files?.path
+    if(!avatarLocalPath){
+        throw new apiError(400,"Avatar file path not found")
+    }
+    const upload=await uploadOnCloudinary(avatarLocalPath);
+    if(!upload){
+        throw new apiError(400,"Something went wrong while uploading the avatar!!!")
+    }
+    const user=await User.findByIdAndUpdate(
+        req.body?._id,
+        {
+            $set:{
+                avatar:avatar.url
+            }
+        },
+        {new:true}
+
+    )
+    return res.status(200).
+    json(
+        200,
+        user,
+        "Avatar updated successfully"
+    )
+})
 export {
     signUp,
     userLogin,
     userLogout,
-    updateUserDeatils
+    updateUserDeatils,
+    updateAvatar
     
 
 } 
