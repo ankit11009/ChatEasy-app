@@ -33,7 +33,7 @@ router.route("/signUp").post(
 
 //instead of writing middleware everytime we can simly just
 
-router.use(arcjetProtection) // this will run always if any of these req is occucred
+// router.use(arcjetProtection) // this will run always if any of these req is occucred
 
 
 router.route("/login").post(userLogin)
