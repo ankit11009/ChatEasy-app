@@ -118,5 +118,6 @@ const getChatPartners=asyncHandler(async(req,res)=>{
 export {
     getAllContact,
     getMessageByUserId,
-    sendMessage
+    sendMessage,
+    getChatPartners
 }
