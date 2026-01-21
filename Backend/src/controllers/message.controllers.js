@@ -68,7 +68,7 @@ const sendMessage=asyncHandler(async(req,res)=>{
     }
 
     const newMessage=new Message({
-        senderId,
+        userId:senderId,
         receiverId,
         text,
         image:imageUrl
@@ -86,6 +86,33 @@ const sendMessage=asyncHandler(async(req,res)=>{
             newMessage,
             "Message fetched  successfully"
         )
+    )
+})
+
+
+const getChatPartners=asyncHandler(async(req,res)=>{
+    const loggedInUserId=req.body
+    if(!loggedInUserId){
+        throw new apiError(400,"User is not logged in!!!")
+    }
+    const messages= await Message.find({
+        $or:[{senderId:loggedInUserId},{receiverId:loggedInUserId}]
+    })
+
+    const chatPartnerId= [
+        ...new Set(messages.map((msg)=> msg.senderId.toString()===loggedInUserId.toString()? msg.receiverId.toString():msg.senderId.toString())),
+    ];
+
+    const chatPartners=await User.find({_id:{$in:chatPartnerId}}).select("-password")
+    if(!chatPartners){
+        throw new apiError(400,"Something went wrong while getting chat partners")
+    }
+
+    return res.status(200).
+    json(
+        200,
+        chatPartners,
+        "Chat partner is fetched successfully"
     )
 })
 export {
