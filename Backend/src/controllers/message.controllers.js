@@ -5,6 +5,7 @@ import apiResponse from "../utils/apiResponse.js"
 import { User } from "../model/user.model.js"
 import { Message } from "../model/message.model.js"
 import { uploadOnCloudinary } from "../utils/cloudinary.js"
+import { log } from "console"
 
 
 
@@ -91,17 +92,23 @@ const sendMessage=asyncHandler(async(req,res)=>{
 
 
 const getChatPartners=asyncHandler(async(req,res)=>{
-    const loggedInUserId=req.body
+    const loggedInUserId=req.user?._id
+    console.log("loggedInUser:",loggedInUserId);
+    
     if(!loggedInUserId){
         throw new apiError(400,"User is not logged in!!!")
     }
     const messages= await Message.find({
-        $or:[{senderId:loggedInUserId},{receiverId:loggedInUserId}]
+        $or:[{userId:loggedInUserId},{receiverId:loggedInUserId}]
     })
+    console.log("messges:",messages);
+    
 
     const chatPartnerId= [
-        ...new Set(messages.map((msg)=> msg.senderId.toString()===loggedInUserId.toString()? msg.receiverId.toString():msg.senderId.toString())),
+        ...new Set(messages.map((msg)=> msg.userId.toString()==loggedInUserId.toString()? msg.receiverId.toString():msg.userId.toString())),
     ];
+    console.log("chat-partner-ID:",chatPartnerId);
+    
 
     const chatPartners=await User.find({_id:{$in:chatPartnerId}}).select("-password")
     if(!chatPartners){
@@ -110,9 +117,11 @@ const getChatPartners=asyncHandler(async(req,res)=>{
 
     return res.status(200).
     json(
-        200,
+       new apiResponse(
+         200,
         chatPartners,
         "Chat partner is fetched successfully"
+       )
     )
 })
 export {
