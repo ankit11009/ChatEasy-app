@@ -18,6 +18,7 @@ app.use(cors({
 app.use(express.json()) // req.body
 app.use(express.urlencoded({limit:"16kb",credentials:true}))
 app.use(express.static("public"))
+app.use(cors({origin:process.env.CLIENT_URL,credentials:true}))
 app.use(cookieParser())
 
 
