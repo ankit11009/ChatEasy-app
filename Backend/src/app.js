@@ -4,21 +4,27 @@ import messageRouter from "./routes/message.routes.js"
 import dotenv from "dotenv"
 import cors from "cors"
 import cookieParser from "cookie-parser"
+import 'dotenv/config'
 
 
 const app=express()
 
 
+
+    
 app.use(cors({
-    origin:process.env.CORS_ORIGIN, // humlog kis kis url se req accept kr rhe hai we have define it inot .env file
-    credentials:true
+    origin:process.env.CORS_ORIGIN,
+    credentials:true,
+    methods:["GET","POST","DELETE","OPTIONS"],
+    allowedHeaders:["Content-Type","Authorization"]
 }))
+
 
 
 app.use(express.json()) // req.body
 app.use(express.urlencoded({limit:"16kb",credentials:true}))
 app.use(express.static("public"))
-app.use(cors({origin:process.env.CLIENT_URL,credentials:true}))
+
 app.use(cookieParser())
 
 
