@@ -1,10 +1,28 @@
 import React from 'react'
-import { useAuthStore } from '../Store/useAuth'
+import BorderAnimatedContainer from '../Components/BorderAnimatedContainer'
+import { useChatStore } from '../Store/useChat'
+
 const ChatPage = () => {
-    const {logout}=useAuthStore()
+    const {activeTab,} = useChatStore()
   return (
-    <div className='z-10'>ChatPage
-        <button onClick={logout} className='w-30 '>Logout</button>
+    <div className="relative w-full max-w-6xl h-200" >
+      {/*LEft Side  */}
+      <BorderAnimatedContainer>
+        <div className="w-80 bg-slate-800/50 backdrop-blur-sm flex flex-col">
+          <ProfileHeader />
+          <ActiveTabSwitch />
+
+          <div>
+            {activeTab==="chats"?<ChatList/>:<ContactList/>}
+          </div>
+        </div>
+      {/*Right side  */}
+      <div className="flex-1 flex flex-col bg-slate-900/50 backdrop-blur-sm">
+      {selectedUser ? <ChatContainer /> : <NoConversationPlaceholder />}
+
+      </div>
+
+      </BorderAnimatedContainer>
     </div>
   )
 }
