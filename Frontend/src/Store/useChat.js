@@ -8,7 +8,7 @@ export const useChatStore= create((set,get)=>({
     chats:[],
     messages:[],
     activeTab:"chats",
-    selectedUSer:null,
+    selectedUser:null,
     isUserLoading:false,
     isMessageLoading:false,
     isSoundEnabled:localStorage.getItem("isSoundEnabled")==="true",

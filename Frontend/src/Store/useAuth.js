@@ -68,5 +68,14 @@ export const useAuthStore=create((set)=>({
             toast.error("Logging out")
         }
         
+    },
+    updateProfile:async(data)=>{
+        try {
+            const res=axiosInstance.patch("/auth/update-avatar",data)
+            set({authUser:res.data})
+            toast.success("Profile updated successfully")
+        } catch (error) {
+            toast.error(error?.response?.data.message)
+        }
     }
 }))

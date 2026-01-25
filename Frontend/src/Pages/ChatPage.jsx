@@ -1,9 +1,15 @@
 import React from 'react'
 import BorderAnimatedContainer from '../Components/BorderAnimatedContainer'
 import { useChatStore } from '../Store/useChat'
+import ProfileHeader from '../Components/ProfileHeader'
+import ActiveTabSwitch from '../Components/ActiveTabSwitch'
+import ChatList from '../Components/ChatList'
+import NoConversationPlaceholder from "../Components/NoConversationPlaceholder"
+
 
 const ChatPage = () => {
-    const {activeTab,} = useChatStore()
+    const {activeTab,selectedUser} = useChatStore()
+    
   return (
     <div className="relative w-full max-w-6xl h-200" >
       {/*LEft Side  */}

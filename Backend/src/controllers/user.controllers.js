@@ -201,7 +201,7 @@ const updateUserDeatils=asyncHandler(async(req,res)=>{
     )
 })
 const updateAvatar=asyncHandler(async(req,res)=>{
-    const avatarLocalPath= req.files?.path
+    const avatarLocalPath= req.files?.avatar[0]?.path
     if(!avatarLocalPath){
         throw new apiError(400,"Avatar file path not found")
     }
