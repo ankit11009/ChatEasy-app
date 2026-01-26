@@ -11,6 +11,7 @@ export const useAuthStore=create((set)=>({
     isLogingUp:false,
 
 
+
     checkAuth:async()=>{
         try {
             const res=await axiosInstance.get("/auth/check")
@@ -47,7 +48,7 @@ export const useAuthStore=create((set)=>({
             const res=await axiosInstance.post("/auth/login",data)
             console.log("Login response:",res);
 
-            set({authUser:res.data})
+            set({authUser:res.data.data.existedUser})
 
             toast.success("Login successfully")
             
@@ -71,8 +72,8 @@ export const useAuthStore=create((set)=>({
     },
     updateProfile:async(data)=>{
         try {
-            const res=axiosInstance.patch("/auth/update-avatar",data)
-            set({authUser:res.data})
+            const res=await axiosInstance.patch("/auth/update-avatar",data)
+            set({authUser:res.data.existedUser})
             toast.success("Profile updated successfully")
         } catch (error) {
             toast.error(error?.response?.data.message)

@@ -15,22 +15,45 @@ import { useChatStore } from '../Store/useChat';
 
   const fileInputRef=useRef(null)
 
-  const handleProfileImageupload=(e)=>{
-    const file=e.target.files[0]
-    if(file){
-      const reader=new FileReader()
-      reader.readAsDataURL(file)
+  const handleProfileImageupload=async(e)=>{
+    // const file=e.target.files[0]
+    // if(file){
+    //   const reader=new FileReader()
+    //   reader.readAsDataURL(file)
 
-      reader.onloadend=async ()=>{
-        const base64Image=reader.result
-        setSelectedImage(base64Image)
-        await updateProfile({profilePic:base64Image})
-      }
+    //   reader.onloadend=async ()=>{
+    //     const base64Image=reader.result
+    //     setSelectedImage(base64Image)
+    //     await updateProfile({profilePic:base64Image})
+    //   }
       
-    }else{
-      console.log("Something went wrong while uploading profile");
+    // }else{
+    //   console.log("Something went wrong while uploading profile");
       
+    // }
+    const file = e.target.files[0];
+    if (file) {
+    // 1. For Local Preview (Keep this so the user sees the change immediately)
+    const reader = new FileReader();
+    reader.readAsDataURL(file);
+    reader.onloadend = () => {
+      setSelectedImage(reader.result);
+    };
+
+    // 2. For Backend Upload (Switch to FormData)
+    const formData = new FormData();
+    formData.append("avatar",file); // Must match the name in your upload.single("avatar") or upload.fields
+
+    try {
+      // Pass the formData directly to your updateProfile function
+      await updateProfile(formData);
+    } catch (error) {
+      console.error("Upload failed:", error);
     }
+
+  } else {
+    console.log("No file selected");
+  }
   }
   return (
     <div className="p-6 border-b border-slate-700/50">
@@ -41,7 +64,7 @@ import { useChatStore } from '../Store/useChat';
           className="size-14 rounded-full overflow-hidden relative group"
           onClick={(e)=>fileInputRef.current.click()}
           >
-            <img src={selectedImage || authUser.profilePic || "/avatar.png"} alt="User image" 
+            <img src={selectedImage || authUser.avatar || "/avatar.png"} alt="User image" 
             className="size-full object-cover"
             />
              <div className="absolute inset-0 bg-black/50 opacity-0 group-hover:opacity-100 flex items-center justify-center transition-opacity">
@@ -61,7 +84,7 @@ import { useChatStore } from '../Store/useChat';
         {/*UserNAme & ONLINE TEXT */}
         <div>
           <h3 className="text-slate-200 font-medium text-base max-w-45 truncate">
-            {authUser.fullName}
+            {authUser?.fullName}
           </h3>
           <p className="text-slate-400 text-xs">Online</p>
         </div>

@@ -11,14 +11,17 @@ import { signUp } from '../controllers/user.controllers.js';
 
 // uploading file will take time so we will use await
 
+
     const uploadOnCloudinary= async (localFilePath) =>{
-
-
         cloudinary.config({ 
-        cloud_name: process.env.CLOUDINARY_CLOUD_NAME, 
-        api_key: process.env.CLOUDINARY_API_KEY, 
-        api_secret: process.env.CLOUDINARY_API_SECRET // Click 'View API Keys' above to copy your API secret
-    });
+cloud_name: process.env.CLOUDINARY_CLOUD_NAME, 
+api_key: process.env.CLOUDINARY_API_KEY, 
+api_secret: process.env.CLOUDINARY_API_SECRET // Click 'View API Keys' above to copy your API secret
+});
+
+        //cloudinary.config () is ou are re-configuring Cloudinary every single time a 
+        // user uploads a file. This is inefficient and can slow down your server.
+
 
 
 
@@ -52,6 +55,7 @@ import { signUp } from '../controllers/user.controllers.js';
         catch (error){
             fs.unlinkSync(localFilePath) // remove the locally saved temporary file
             // as the upload operatio got failed
+
             return null ;
         }
     }

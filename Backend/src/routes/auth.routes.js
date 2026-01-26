@@ -33,13 +33,13 @@ router.route("/signUp").post(
 
 //instead of writing middleware everytime we can simly just
 
-// router.use(arcjetProtection) // this will run always if any of these req is occucred
+router.use(arcjetProtection) // this will run always if any of these req is occucred
 
 
 router.route("/login").post(userLogin)
 router.route("/logout").post(verifyJWT,userLogout)
 router.route("/update").patch(verifyJWT,updateUserDeatils)
-router.route("/update-avatar").patch(verifyJWT,updateAvatar)
+router.route("/update-avatar").patch(verifyJWT,upload.single("avatar"),updateAvatar)
 router.route("/check").get(verifyJWT,(req,res)=>res.status(200).json(req.user))
 
 

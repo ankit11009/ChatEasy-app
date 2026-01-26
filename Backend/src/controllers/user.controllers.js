@@ -122,7 +122,7 @@ const userLogin=asyncHandler(async(req,res)=>{
 
     const options={
         httpOnly:true,
-        secure:false
+        secure:false,
     }
 
     return res.status(200).
@@ -201,29 +201,47 @@ const updateUserDeatils=asyncHandler(async(req,res)=>{
     )
 })
 const updateAvatar=asyncHandler(async(req,res)=>{
-    const avatarLocalPath= req.files?.avatar[0]?.path
+    const avatarLocalPath= req.file?.path || req.files?.avatar?.[0]?.path;
     if(!avatarLocalPath){
         throw new apiError(400,"Avatar file path not found")
     }
+    // console.log("avatarLocalPath",avatarLocalPath);
+    
     const upload=await uploadOnCloudinary(avatarLocalPath);
     if(!upload){
         throw new apiError(400,"Something went wrong while uploading the avatar!!!")
     }
+   
+    
+
+// Create a transformed URL: 
+// 'w_500,h_500' = 500x500 pixels
+// 'c_fill' = Crops and fills the square
+// 'g_face' = Automatically detects and centers the user's face!
+const optimizedUrl = upload.url.replace("/upload/", "/upload/w_500,h_500,c_fill,g_face/");
+
+
     const user=await User.findByIdAndUpdate(
-        req.body?._id,
+        req.user?._id,
         {
             $set:{
-                avatar:avatar.url
+                avatar:optimizedUrl
             }
         },
         {new:true}
 
-    )
+    ).select("-password")
+
+
+    
+
     return res.status(200).
     json(
-        200,
-        user,
-        "Avatar updated successfully"
+        new apiResponse(
+            200,
+            user,
+            "Avatar updated successfully"
+        )
     )
 })
 export {
