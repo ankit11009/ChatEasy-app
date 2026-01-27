@@ -12,8 +12,8 @@ const router=express.Router()
 
 router.use(arcjetProtection,verifyJWT)
 
-router.route("/all-contact").get(getAllContact)
-router.route("/chats").post(getChatPartners)
+router.route("/all-contacts").get(getAllContact)
+router.route("/chats").get(getChatPartners)
 router.route("/:id").get(getMessageByUserId)
 router.route("/send/:id").post(sendMessage)
 

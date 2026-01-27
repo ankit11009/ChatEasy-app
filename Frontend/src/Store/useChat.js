@@ -16,26 +16,26 @@ export const useChatStore= create((set,get)=>({
         localStorage.setItem("isSoundEnabled",!get().isSoundEnabled)
         set({isSoundEnabled:!get().isSoundEnabled})
     },
-    setActiveTab:(tab)=>set({setActiveTab:tab}),
+    setActiveTab:(tab)=>set({activeTab:tab}),
     setSelectedUser:(selectedUser)=>set({selectedUser}),
 
     gettAllContacts:async()=>{
         set({isUserLoading:true})
         try {
-            const res=await axiosInstance.get("/message/allContacts")
-            set({allContacts:res.data})
+            const res=await axiosInstance.get("/message/all-contacts")
+            set({allContacts:res.data.data})
         } catch (error) {
             toast.error(error?.response?.data.message)
             
         }finally{
-            set({isUserLoading:true})
+            set({isUserLoading:false})
         }
     },
     getMyChatPartner:async()=>{
         set({isUserLoading:true})
         try {
             const res=await axiosInstance.get("/message/chats")
-            set({chats:res.data})
+            set({chats:res.data.data})
         } catch (error) {
             toast.error(error?.response?.data.message)
         }finally{
