@@ -12,9 +12,9 @@ const ChatList = () => {
   //it will get all chat partner 
 
   useEffect(()=>{getMyChatPartner()},[])
-  if(isUserLoading) return <UsersLoadingSkeleton/>
+  if(isUserLoading) return <UsersLoadingSkeleton/> 
   
-  if(chats.lenght===0) return <NoChatsFound/>
+  if(chats.length===0) return <NoChatsFound/>
 
   return (
     <>

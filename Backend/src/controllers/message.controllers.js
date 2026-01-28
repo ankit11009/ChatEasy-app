@@ -32,21 +32,23 @@ const getAllContact=asyncHandler(async(req,res)=>{
 })
 
 const getMessageByUserId=asyncHandler(async(req,res)=>{
-    const myId=req.user._id
+    const myId=req.user?._id
     const {id:userToChatId}=req.params
 
-    const message=await Message.find({
+    const messages=await Message.find({
         $or:[
-            {senderId:myId,receiverId:userToChatId},
-            {senderId:userToChatId,receiverId:myId}
+            {userId:myId,receiverId:userToChatId},
+            {userId:userToChatId,receiverId:myId}
         ]
     })
+   
+    
 
     return res.status(200).
     json(
         new apiResponse(
             200,
-            message,
+            messages,
             "Messages fetched successfully"
         )
     )
