@@ -10,26 +10,43 @@ import MessagesLoadingSkeleton from './MessagesLoadingSkeleton.jsx'
 const ChatContainer = () => {
   const{messages,isMessageLoading,getMessageByUserId,selectedUser}=useChatStore()
   const {authUser}=useAuthStore()
+ 
+const scrollRef = React.useRef(null);
+
+
+
 
   useEffect(()=>{
     getMessageByUserId(selectedUser._id)
   },[selectedUser,getMessageByUserId])
+
+
+
+
+ useEffect(() => {
+        if (scrollRef.current) {
+            scrollRef.current.scrollIntoView({ behavior: "smooth" });
+        }
+    }, [messages]);
+
+
+
   return (
-    <div>
+    <div className="flex flex-col h-screen overflow-hidden bg-slate-900">
       <ChatHeader/>
-      <div className="flex-1 px-6 overflow-y-auto py-8">
+      <div className="flex-1 px-6 overflow-y-auto py-">
         {messages?.length>0 && !isMessageLoading?(
-          <div className="max-w-3xl mx-auto space-y-6">
+          <div className="lex-1 overflow-y-auto p-4 space-y-4 custom-scrollbar">
             {messages.map(msg=>(
               <div key={msg._id} 
-              className={`chat ${msg.senderId===authUser._id ?"chat-end":"chat-start"}`}
+              className={`chat ${msg.userId===authUser._id ?"chat-end":"chat-start"}`}
               >
                 <div className =
                 {`chat-bubble relative ${
-                  msg.senderId===authUser._id ? "bg-cyan-600 text-white" :"bg-slate-800 text-slate-200"
+                  msg.userId===authUser._id ? "bg-cyan-600 text-white" :"bg-slate-800 text-slate-200"
                 }`}>
                   {
-                    msg.img && (
+                    msg.image && (
                       <img src={msg.image} alt="shared" className='rounded-lg h-48 object-cover' />
                     )
                   }
@@ -44,10 +61,13 @@ const ChatContainer = () => {
                 </div>
               </div>
             ))}
+             <div ref={scrollRef} />
           </div>
         ): isMessageLoading? <MessagesLoadingSkeleton/> :(<NoChatHistory name={selectedUser.fullName}/>)}
       </div>
       <MessageInput/>
+     
+      
     </div>
   )
 }

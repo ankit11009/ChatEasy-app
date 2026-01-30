@@ -2,6 +2,7 @@ import {create} from 'zustand'
 import { axiosInstance } from '../lib/axios'
 import toast from 'react-hot-toast'
 import axios from 'axios'
+import { useAuthStore } from './useAuth'
 
 
 export const useChatStore= create((set,get)=>({
@@ -47,7 +48,7 @@ export const useChatStore= create((set,get)=>({
         set({isMessageLoading:true})
         try {
             const res=await axiosInstance.get(`/message/${userId}`)
-            console.log(res);
+            
             
             set({messages:res.data.data})
             
@@ -63,11 +64,34 @@ export const useChatStore= create((set,get)=>({
     },
     // which ever the user seleceted we are sending that id from selectedUser
     sendMessage:async(messageData)=>{
-        const {selectedUser,mesaages}=get()
+        const {selectedUser,messages}=get()
+        const {authUser}=useAuthStore.getState()
+
+        //optimisation: removing the latency
+
+        const temId=`temp-${Date.now()}`
+
+        const optimisticMessage={
+            _id:temId,
+            userId:authUser._id,
+            receiverId:selectedUser._id,
+            text:messageData.text,
+            image:messageData.image,
+            createdAt:new Date(),
+            isOptimistic:true,
+        }
+
+        set({messages:[...messages,optimisticMessage]})
+
         try {
-        const res=await axiosInstance.post(`/messages/send/${selectedUser._id}`,messageData)
-        set({messages:mesaages.concat(res.data)})
+        const res=await axiosInstance.post(`/message/send/${selectedUser._id}`,messageData)
+        
+        set({messages:messages.concat(res.data.data)})
+        console.log("messages",messages);
+        
         } catch (error) {
+            //removing optimistic message on failure 
+            set({messages:messages})
             toast.error(error?.response?.mesaages?.data || "Something went wrong")
         }
     }

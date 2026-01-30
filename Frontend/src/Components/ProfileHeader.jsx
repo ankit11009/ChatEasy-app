@@ -16,21 +16,7 @@ import { useChatStore } from '../Store/useChat';
   const fileInputRef=useRef(null)
 
   const handleProfileImageupload=async(e)=>{
-    // const file=e.target.files[0]
-    // if(file){
-    //   const reader=new FileReader()
-    //   reader.readAsDataURL(file)
-
-    //   reader.onloadend=async ()=>{
-    //     const base64Image=reader.result
-    //     setSelectedImage(base64Image)
-    //     await updateProfile({profilePic:base64Image})
-    //   }
-      
-    // }else{
-    //   console.log("Something went wrong while uploading profile");
-      
-    // }
+   
     const file = e.target.files[0];
     if (file) {
     // 1. For Local Preview (Keep this so the user sees the change immediately)
