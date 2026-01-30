@@ -4,7 +4,7 @@ import dotenv from 'dotenv'
 import messageRouter from "./routes/message.routes.js"
 import connectDB from './db/index.js'
 
-import { app } from './app.js'
+import { app, server } from "./lib/socket.js"
 
 
 dotenv.config(
@@ -27,7 +27,7 @@ const PORT=process.env.PORT
 connectDB()
 
 .then(()=>{
-    app.listen(PORT || 80000,()=>console.log(`Server is running on ${PORT}`)) 
+    server.listen(PORT || 80000,()=>console.log(`Server is running on ${PORT}`)) 
     app.on("error",(error)=>{
         console.log("Server error",error);
         

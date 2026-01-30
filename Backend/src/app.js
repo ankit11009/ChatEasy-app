@@ -5,9 +5,10 @@ import dotenv from "dotenv"
 import cors from "cors"
 import cookieParser from "cookie-parser"
 import 'dotenv/config'
+import { app } from "./lib/socket.js"
 
 
-const app=express()
+
 
 
 
