@@ -11,7 +11,7 @@ const ChatList = () => {
   const {getMyChatPartner,chats,isUserLoading,setSelectedUser}=useChatStore()
   const {onlineUsers}=useAuthStore()
 
-  //it will get all chat partner 
+
 
   useEffect(()=>{getMyChatPartner()},[])
   if(isUserLoading) return <UsersLoadingSkeleton/> 

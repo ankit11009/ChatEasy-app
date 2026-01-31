@@ -10,7 +10,7 @@ import 'dotenv/config'
 
 
 const generateAccessTokenAndRefeshToken=async(userId)=>{
-    // console.log("userId:",userId);
+   
     
     try {
         const user=await User.findById(userId)
@@ -52,24 +52,13 @@ const signUp=asyncHandler(async(req,res)=>{
         throw new apiError(400,"Email exist!!!")
     }
 
-    // const avatarLocalpath=req.files?.avatar?.[0]?.path
-    // if(!avatarLocalpath){
-    //     throw new apiError(400,"Avatar file path not found")
-    // }
-    // console.log(avatarLocalpath);
-    
-    // const avatar=await uploadOnCloudinary(avatarLocalpath)
-    // if(!avatar){
-    //     throw new apiError(400,"Avatar not uploaded successfully")
-    // }
-
    
 
     const user= await User.create({
     fullName,
     email,
     password,
-    // avatar:avatar.url,
+   
 })
 
 const createduser=await User.findById(user._id).select(
@@ -90,7 +79,7 @@ json(
     )
 )
 
-//calling function sendWelcomeEmail to send email
+
 
 
 
@@ -122,7 +111,7 @@ const userLogin=asyncHandler(async(req,res)=>{
 
     const options={
         httpOnly:true,
-        secure:false,
+        secure:true,
     }
 
     return res.status(200).
@@ -155,7 +144,7 @@ const userLogout=asyncHandler(async(req,res)=>{
 
         const options={
             httpOnly:true,
-            secure:false
+            secure:true
         }
 
         return res.status(200)
@@ -205,7 +194,7 @@ const updateAvatar=asyncHandler(async(req,res)=>{
     if(!avatarLocalPath){
         throw new apiError(400,"Avatar file path not found")
     }
-    // console.log("avatarLocalPath",avatarLocalPath);
+   
     
     const upload=await uploadOnCloudinary(avatarLocalPath);
     if(!upload){
@@ -214,10 +203,7 @@ const updateAvatar=asyncHandler(async(req,res)=>{
    
     
 
-// Create a transformed URL: 
-// 'w_500,h_500' = 500x500 pixels
-// 'c_fill' = Crops and fills the square
-// 'g_face' = Automatically detects and centers the user's face!
+
 const optimizedUrl = upload.url.replace("/upload/", "/upload/w_500,h_500,c_fill,g_face/");
 
 

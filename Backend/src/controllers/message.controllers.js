@@ -95,7 +95,7 @@ const sendMessage=asyncHandler(async(req,res)=>{
 
 const getChatPartners=asyncHandler(async(req,res)=>{
     const loggedInUserId=req.user?._id
-    // console.log("loggedInUser:",loggedInUserId);
+   
     
     if(!loggedInUserId){
         throw new apiError(400,"User is not logged in!!!")
@@ -103,13 +103,13 @@ const getChatPartners=asyncHandler(async(req,res)=>{
     const messages= await Message.find({
         $or:[{userId:loggedInUserId},{receiverId:loggedInUserId}]
     })
-    // console.log("messges:",messages);
+
     
 
     const chatPartnerId= [
         ...new Set(messages.map((msg)=> msg.userId.toString()==loggedInUserId.toString()? msg.receiverId.toString():msg.userId.toString())),
     ];
-    // console.log("chat-partner-ID:",chatPartnerId);
+ 
     
 
     const chatPartners=await User.find({_id:{$in:chatPartnerId}}).select("-password")
