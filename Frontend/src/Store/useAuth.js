@@ -1,24 +1,37 @@
 import {create} from 'zustand'
 import { axiosInstance } from '../lib/axios'
 import toast from 'react-hot-toast'
-import { LogOut } from 'lucide-react'
+import { io } from "socket.io-client";
 
 
-export const useAuthStore=create((set)=>({
+
+
+
+const BASE_URL = import.meta.env.MODE === "development" ? "http://localhost:8000" : "/";
+
+
+
+
+
+export const useAuthStore=create((set,get)=>({
     authUser:null,
     isCheckingAuth:true,
     isSigningUp:false,
     isLogingUp:false,
-
+    socket:null,
+    onlineUsers:[], 
 
 
     checkAuth:async()=>{
         try {
             const res=await axiosInstance.get("/auth/check")
-            set({authUser:res.data})
+            set({authUser:res.data.data})
+            get().connectSocket();
+           
         } catch (error) {
             console.log("Error in authCheck:",error);
             set({authUser:null})
+
         } finally{
             set({isCheckingAuth:false})
         }
@@ -32,6 +45,8 @@ export const useAuthStore=create((set)=>({
             set({authUser:res.data})
             // hot toast
             toast.success("Account created successfully!")
+            get().connectSocket();
+           
 
         }catch (error) {
             console.log("Error",error);
@@ -51,10 +66,13 @@ export const useAuthStore=create((set)=>({
             set({authUser:res.data.data.existedUser})
 
             toast.success("Login successfully")
+            get().connectSocket();
+
+          
             
         } catch (error) {
             console.log(error);
-            toast.error(error.response?.message?.data)
+            toast.error(error.response?.data?.message)
             
         }finally{
             set({isSLogingUp:false})
@@ -65,6 +83,7 @@ export const useAuthStore=create((set)=>({
             await axiosInstance.post("/auth/logout")
             set({authUser:null})
             toast.success("Logout successfully")
+            get().disconnectSocket()
         } catch (error) {
             toast.error("Logging out")
         }
@@ -78,5 +97,26 @@ export const useAuthStore=create((set)=>({
         } catch (error) {
             toast.error(error?.response?.data.message)
         }
-    }
+    },
+    connectSocket:()=>{
+        if (!authUser || get().socket?.connected) return;
+
+    const socket = io(BASE_URL, {
+      withCredentials: true, // this ensures cookies are sent with the connection
+    });
+
+    socket.connect();
+
+    set({ socket });
+
+    // listen for online users event
+    socket.on("getOnlineUsers", (userIds) => {
+      set({ onlineUsers: userIds });
+    });
+    },
+      disconnectSocket: () => {
+    if (get().socket?.connected) get().socket.disconnect();
+  },
+   
+   
 }))
