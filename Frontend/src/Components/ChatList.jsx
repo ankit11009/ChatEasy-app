@@ -26,7 +26,7 @@ const ChatList = () => {
      onClick={()=>setSelectedUser(chat)}
       >
          <div className="flex   items-center gap-3">
-          <div className={` avatar-${onlineUsers.includes(chat._id) ? "online" : "offline"}`}></div>
+          <div className={` avatar${onlineUsers.includes(chat._id) ? "online" : "offline"}`}></div>
               <div className="size-15  rounded-full">
                 <img className='' src={chat.avatar || "/avatar.png"} alt={chat.fullName} />
               </div>
