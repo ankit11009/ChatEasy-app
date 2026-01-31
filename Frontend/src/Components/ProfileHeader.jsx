@@ -42,8 +42,8 @@ import { useChatStore } from '../Store/useChat';
   }
   }
   return (
-    <div className="p-6 border-b border-slate-700/50">
-      <div className="flex items-center justify-between">
+    <div className="p-6 border-b border-slate-700/50 flex">
+      <div className="flex items-center">
         {/*Avatar */}
         <div className='avatar online'>
           <button
@@ -69,14 +69,14 @@ import { useChatStore } from '../Store/useChat';
         </div>
         {/*UserNAme & ONLINE TEXT */}
         <div>
-          <h3 className="text-slate-200 font-medium text-base max-w-45 truncate">
+          <h3 className="text-slate-200 font-medium pl-3 text-base max-w-45 truncate">
             {authUser?.fullName}
           </h3>
-          <p className="text-slate-400 text-xs">Online</p>
+          <p className="text-slate-400 pl-3 text-xs">Online</p>
         </div>
       </div>
       {/*Buttons */}
-      <div className="flex gap-4 items-center">
+      <div className="flex pl-25 gap-4 items-center">
         {/*Logout Button */}
         
             <button
