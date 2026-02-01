@@ -13,7 +13,7 @@ import { app } from "./lib/socket.js"
 
     
 app.use(cors({
-    origin:process.env.CORS_ORIGIN,
+    origin:["https://chat-easy-app.vercel.app", "http://localhost:5173"],
     credentials:true,
     methods:["GET","POST","DELETE","OPTIONS","PATCH"],
     allowedHeaders:["Content-Type","Authorization"]
