@@ -24,7 +24,7 @@ const ContactList = () => {
           onClick={() => setSelectedUser(contact)}
         >
           <div className="flex items-center gap-3  ">
-          <div className={`avatar${onlineUsers.includes(contact._id) ? "online" : "offline"}`}></div>
+          <div className={`avatar ${onlineUsers.includes(contact._id) ? "online" : "offline"}`}></div>
               <div className="size-15 rounded-full ">
                 <img className='' src={contact.avatar || "/avatar.png"} alt='contact.fullName' />
               </div>
