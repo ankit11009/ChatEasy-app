@@ -22,7 +22,7 @@ function App() {
     checkAuth()
   },[])
  if(isCheckingAuth) return <PageLoader />
-  console.log("authUser:",authUser);
+  
   
   
   

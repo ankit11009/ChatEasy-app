@@ -13,12 +13,14 @@ const ChatContainer = () => {
  
 const scrollRef = React.useRef(null);
 
+if (!selectedUser) return <NoConversationPlaceholder />;
+
 
 
 
   useEffect(()=>{
-    getMessageByUserId(selectedUser._id)
-  },[selectedUser,getMessageByUserId])
+    getMessageByUserId(selectedUser?._id)
+  },[selectedUser?._id,getMessageByUserId])
 
 
 
@@ -63,7 +65,7 @@ const scrollRef = React.useRef(null);
             ))}
              <div ref={scrollRef} />
           </div>
-        ): isMessageLoading? <MessagesLoadingSkeleton/> :(<NoChatHistory name={selectedUser.fullName}/>)}
+        ): isMessageLoading? <MessagesLoadingSkeleton/> :(<NoChatHistory name={selectedUser?.fullName}/>)}
       </div>
       <MessageInput/>
      
