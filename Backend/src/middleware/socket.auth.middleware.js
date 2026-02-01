@@ -6,19 +6,15 @@ import cookie from "cookie"
 
 export const socketAuthMiddleware=async(socket,next)=>{
     try {
-    // const token1 = socket.handshake.headers.cookie
-    //   ?.split(";")
-    //   .find((row) => row.startsWith("jwt="))
-    //   ?.split("=")[1];
-    // const cookies = cookie.parse(socket.handshake.headers.cookie || "");
+  
     const cookieHeader = socket.handshake.headers.cookie;
 
       const cookies = cookie.parse(cookieHeader);
     const token = cookies.accessToken; 
-    // const token = cookies.jwt;
+
 
     console.log("token:",token);
-    // console.log("token:",token1);
+  
     
 
       if (!token) {
