@@ -14,25 +14,29 @@ const ContactList = () => {
 
   if(isUserLoading) return <UsersLoadingSkeleton/>
   
+if (!allContacts || allContacts.length === 0) {
+  return <div className="p-4 text-slate-400 text-center">No contacts found</div>;
+}
 
   return (
     <>
     {allContacts?.map((contact) => (
-        <div
-          key={contact._id}
-          className="bg-cyan-500/10 p-3 m-2 rounded-xl cursor-pointer hover:bg-cyan-500/20 transition-colors"
-          onClick={() => setSelectedUser(contact)}
-        >
-          <div className="flex items-center gap-3  ">
-          <div className={`avatar ${onlineUsers.includes(contact._id) ? "online" : "offline"}`}></div>
-              <div className="size-15 rounded-full ">
-                <img className='' src={contact.avatar || "/avatar.png"} alt='contact.fullName' />
-              </div>
-            <h4 className="text-slate-200 font-medium p-2" >{contact.fullName}</h4>
-            </div>
-          </div>
-        
-      ))}
+  <div
+    key={contact._id}
+    className="bg-cyan-500/10 p-3 m-2 rounded-xl cursor-pointer hover:bg-cyan-500/20 transition-colors"
+    onClick={() => setSelectedUser(contact)}
+  >
+    <div className="flex items-center gap-3">
+      {/* WRAP the image inside this div */}
+      <div className={`avatar ${onlineUsers.includes(contact._id) ? "online" : "offline"}`}>
+        <div className="w-12 rounded-full">
+          <img src={contact.avatar || "/avatar.png"} alt={contact.fullName} />
+        </div>
+      </div>
+      <h4 className="text-slate-200 font-medium">{contact.fullName}</h4>
+    </div>
+  </div>
+))}
     </>
   )
 }

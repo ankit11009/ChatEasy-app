@@ -16,7 +16,7 @@ const ChatList = () => {
   useEffect(()=>{getMyChatPartner()},[])
   if(isUserLoading) return <UsersLoadingSkeleton/> 
   
-  if(chats.length===0) return <NoChatsFound/>
+ if(!chats || chats.length === 0) return <NoChatsFound/>
 
   return (
     <>
