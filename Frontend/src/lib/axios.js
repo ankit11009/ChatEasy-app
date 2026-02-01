@@ -3,7 +3,9 @@ import  axios from 'axios'
 
 
 export const axiosInstance = axios.create({
-  baseURL: import.meta.env.VITE_API_URL + "/api",
+  baseURL: import.meta.env.VITE_API_URL 
+    ? `${import.meta.env.VITE_API_URL}/api` 
+    : "https://chateasy-app-production.up.railway.app/api",
   withCredentials: true,
 });
 
