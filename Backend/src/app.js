@@ -1,7 +1,6 @@
 import express from "express"
 import authRouter from "./routes/auth.routes.js"
 import messageRouter from "./routes/message.routes.js"
-import dotenv from "dotenv"
 import cors from "cors"
 import cookieParser from "cookie-parser"
 import 'dotenv/config'
@@ -14,7 +13,7 @@ import { app } from "./lib/socket.js"
 
     
 app.use(cors({
-    origin:"http://localhost:5173",
+    origin:process.env.CORS_ORIGIN,
     credentials:true,
     methods:["GET","POST","DELETE","OPTIONS","PATCH"],
     allowedHeaders:["Content-Type","Authorization"]
