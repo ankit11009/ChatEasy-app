@@ -10,17 +10,24 @@ import { app } from "./lib/socket.js"
 
 
 
-app.set("trust proxy", 1);
+const allowedOrigins = [
+  "https://chat-easy-app.vercel.app",
+  "https://chat-easy-dqabtrkkp-ankit-kumars-projects-481fdceb.vercel.app"
+];
 
-    
 app.use(cors({
-  origin: "https://chat-easy-app.vercel.app",
-  credentials: true,
-  methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
-  allowedHeaders: ["Content-Type", "Authorization"]
+  origin: function (origin, callback) {
+    // allow requests with no origin (Postman, curl)
+    if (!origin) return callback(null, true);
+
+    if (allowedOrigins.includes(origin)) {
+      return callback(null, true);
+    }
+
+    return callback(new Error("Not allowed by CORS"));
+  },
+  credentials: true
 }));
-
-
 
 
 
