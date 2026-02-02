@@ -11,7 +11,7 @@ const server=http.createServer(app)
 
 const io=new Server(server,{
     cors:{
-        origin:process.env.CORS_ORIGIN || process.env.FRONTEND_URL || "http://localhost:5173",
+        origin:"https://chat-easy-app.vercel.app",
         credentials:true,
     }
 })
