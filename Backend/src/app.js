@@ -8,32 +8,19 @@ import { app } from "./lib/socket.js"
 
 
 
-const allowedOrigins = [
-  "https://chat-easy-app-git-main-ankit-kumars-projects-481fdceb.vercel.app",
-  "https://chat-easy-ez0crg1sr-ankit-kumars-projects-481fdceb.vercel.app",
-  "https://chat-easy-app.vercel.app" // Add your main production domain if you have one
-];
 
+
+app.set("trust proxy", 1);
 
     
 app.use(cors({
-  origin: (origin, callback) => {
-    // Allow requests with no origin (like mobile apps) 
-    // or origins in our allowed list
-    if (!origin || allowedOrigins.includes(origin)) {
-      callback(null, true);
-    } else {
-      console.error(`Blocked by CORS: ${origin}`);
-      callback(new Error("Not allowed by CORS"));
-    }
-  },
+  origin: "https://chat-easy-app.vercel.app",
   credentials: true,
-  methods: ["GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS"],
+  methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
   allowedHeaders: ["Content-Type", "Authorization"]
 }));
 
-// Handle the preflight OPTIONS request explicitly
-app.options("/*any", cors());
+app.options("*", cors());
 
 
 
