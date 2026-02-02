@@ -9,7 +9,7 @@ import 'dotenv/config'
 
 
 const app = express();
-export { app };
+
 
 
 
