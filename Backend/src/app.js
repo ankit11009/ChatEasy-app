@@ -10,7 +10,7 @@ import { app } from "./lib/socket.js"
 
 
 
-app.options("/*any", cors());
+app.set("trust proxy", 1);
 
     
 app.use(cors({
