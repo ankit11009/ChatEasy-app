@@ -4,7 +4,12 @@ import messageRouter from "./routes/message.routes.js"
 import cors from "cors"
 import cookieParser from "cookie-parser"
 import 'dotenv/config'
-import { app } from "./lib/socket.js"
+
+
+
+
+const app = express();
+export { app };
 
 
 

@@ -3,9 +3,9 @@ import http from "http"
 import express from "express"
 import "dotenv/config"
 import { socketAuthMiddleware } from "../middleware/socket.auth.middleware.js"
+import { app } from "../app.js"
 
 
-const app=express()
 const server=http.createServer(app)
 
 
