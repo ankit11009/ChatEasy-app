@@ -11,7 +11,11 @@ const server=http.createServer(app)
 
 const io=new Server(server,{
     cors:{
-        origin:"",
+        origin:[
+  "https://chat-easy-app.vercel.app",
+ " https://chat-easy-app-ankit-kumars-projects-481fdceb.vercel.app",
+  "https://chat-easy-dqabtrkkp-ankit-kumars-projects-481fdceb.vercel.app"
+],
         credentials:true,
     }
 })
