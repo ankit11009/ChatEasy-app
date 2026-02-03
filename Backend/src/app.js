@@ -16,7 +16,7 @@ const app = express();
 
 
 app.use(cors({
-  origin: [
+  origin:[
     "https://chat-easy-app.vercel.app",
     "https://chat-easy-app-ankit-kumars-projects-481fdceb.vercel.app",
     "https://chat-easy-dqabtrkkp-ankit-kumars-projects-481fdceb.vercel.app"
