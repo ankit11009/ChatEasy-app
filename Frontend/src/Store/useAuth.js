@@ -37,34 +37,32 @@ export const useAuthStore=create((set,get)=>({
     set({ isCheckingAuth: false });
   }
 },
-    login:async(data)=>{
-        set({ isLoggingIn: true });
-        try {
-            const res=await axiosInstance.post("/auth/login",data)
-            console.log("Login response:",res);
+    login: async (data) => {
+    set({ isLoggingIn: true });
+    try {
+        const res = await axiosInstance.post("/auth/login", data);
+        
+        // Add a safety check before destructuring
+        if (res?.data?.data) {
+            const { existedUser, accessToken } = res.data.data;
 
-             const { existedUser, accessToken } = res.data.data;
+            localStorage.setItem("accessToken", accessToken);
+            set({ authUser: existedUser });
 
-      localStorage.setItem("accessToken", accessToken);
-      set({ authUser: existedUser });
-
-      connectSocket(accessToken, (users) => {
-        set({ onlineUsers: users });
-      });
-
-            toast.success("Login successfully")
-           
-
-          
-            
-        } catch (error) {
-            console.log(error);
-            toast.error(error.response?.data?.message)
-            
-        }finally{
-            set({isLoggingIn:false})
+            connectSocket(accessToken, (users) => {
+                set({ onlineUsers: users });
+            });
+            toast.success("Login successfully");
         }
-    },
+    } catch (error) {
+        console.error("Login Error:", error);
+        // Safely access error message
+        const message = error.response?.data?.message || "Network Error: Check your connection";
+        toast.error(message);
+    } finally {
+        set({ isLoggingIn: false });
+    }
+},
     logout: async () => {
     try {
       await axiosInstance.post("/auth/logout");
