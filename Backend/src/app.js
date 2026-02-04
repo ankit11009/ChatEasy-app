@@ -11,14 +11,26 @@ import 'dotenv/config'
 const app = express()
 
 
-app.use(cors({
-  origin:process.env.CORS_ORIGIN,
-  credentials: true,
-  methods: ["GET", "POST", "DELETE", "OPTIONS", "PATCH"],
-  allowedHeaders: ["Content-Type", "Authorization","Origin", "Accept"]
-}))
+// app.use(cors({
+//   origin:process.env.CORS_ORIGIN,
+//   credentials: true,
+//   methods: ["GET", "POST", "DELETE", "OPTIONS", "PATCH"],
+//   allowedHeaders: ["Content-Type", "Authorization","Origin", "Accept"]
+// }))
 
-app.options("(.*)", cors());
+// app.options("(.*)", cors());
+app.use((req, res, next) => {
+  res.header("Access-Control-Allow-Origin", process.env.CORS_ORIGIN);
+  res.header("Access-Control-Allow-Credentials", "true");
+  res.header("Access-Control-Allow-Methods", "GET, POST, DELETE, OPTIONS, PATCH, PUT");
+  res.header("Access-Control-Allow-Headers", "Content-Type, Authorization, Origin, Accept");
+  
+  // Directly respond to OPTIONS 
+  if (req.method === "OPTIONS") {
+    return res.sendStatus(200);
+  }
+  next();
+});
 
 
 
