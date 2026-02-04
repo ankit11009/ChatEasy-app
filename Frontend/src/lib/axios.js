@@ -3,7 +3,7 @@ import  axios from 'axios'
 
 export const axiosInstance = axios.create({
   baseURL:
-    https://chateasy-app.onrender.com/api/v1,
+    "https://chateasy-app.onrender.com/api/v1",
   withCredentials: true,
 });
 
