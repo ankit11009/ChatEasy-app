@@ -31,6 +31,13 @@ const userSocketMap =new Map(); // {userId:socketId}
 const disconnectTimers=new Map()
 
 
+export const getReceiverSocketId = (receiverId) => {
+  const sockets = userSocketMap.get(receiverId);
+  // Return the first available socket ID for that user
+  return sockets ? Array.from(sockets)[0] : null;
+};
+
+
 io.on("connection", (socket) => {
   const userId = socket.user._id.toString();
 
