@@ -37,6 +37,36 @@ export const useAuthStore=create((set,get)=>({
     set({ isCheckingAuth: false });
   }
 },
+signup: async (data) => {
+        set({ isSigningUp: true });
+        try {
+            const res = await axiosInstance.post("/auth/signup", data);
+            
+            // Assuming your backend returns data in a similar structure to login
+            if (res?.data?.data) {
+                const { newUser, accessToken } = res.data.data;
+
+                localStorage.setItem("accessToken", accessToken);
+                set({ authUser: newUser });
+
+                connectSocket(accessToken, (users) => {
+                    set({ onlineUsers: users });
+                });
+                
+                toast.success("Account created successfully!");
+            } else {
+                // Handle cases where the backend structure might differ
+                set({ authUser: res.data });
+                toast.success("Account created successfully!");
+            }
+        } catch (error) {
+            console.error("Signup Error:", error);
+            const message = error.response?.data?.message || "Signup failed. Please try again.";
+            toast.error(message);
+        } finally {
+            set({ isSigningUp: false });
+        }
+    },
     login: async (data) => {
     set({ isLoggingIn: true });
     try {
