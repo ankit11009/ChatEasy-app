@@ -40,7 +40,7 @@ export const useAuthStore=create((set,get)=>({
 signUp: async (data) => {
         set({ isSigningUp: true });
         try {
-            const res = await axiosInstance.post("/auth/signup", data);
+            const res = await axiosInstance.post("/auth/signUp", data);
             
             // Assuming your backend returns data in a similar structure to login
             if (res?.data?.data) {
