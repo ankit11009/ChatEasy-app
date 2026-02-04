@@ -18,7 +18,7 @@ app.use(cors({
   allowedHeaders: ["Content-Type", "Authorization","Origin", "Accept"]
 }))
 
-app.options("*", cors());
+app.options("(.*)", cors());
 
 
 
