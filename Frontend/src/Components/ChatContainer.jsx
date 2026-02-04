@@ -8,7 +8,7 @@ import MessageInput from './MessageInput.jsx'
 import MessagesLoadingSkeleton from './MessagesLoadingSkeleton.jsx'
 
 const ChatContainer = () => {
-  const{messages,isMessageLoading,getMessageByUserId,selectedUser}=useChatStore()
+  const{messages,isMessageLoading,getMessageByUserId,selectedUser,subscribeToMessages,unsubscribeFromMessages}=useChatStore()
   const {authUser}=useAuthStore()
  
 const scrollRef = React.useRef(null);
@@ -16,7 +16,16 @@ const scrollRef = React.useRef(null);
 if (!selectedUser) return <NoConversationPlaceholder />;
 
 
+// Inside your Chat component
+useEffect(() => {
+    getMessageByUserId(selectedUser._id);
 
+    subscribeToMessages(); // Start listening
+
+    // Cleanup: Stop listening when the user closes the chat or changes contact
+    return () => unsubscribeFromMessages(); 
+
+}, [selectedUser._id, getMessageByUserId, subscribeToMessages, unsubscribeFromMessages]);
 
   useEffect(()=>{
     getMessageByUserId(selectedUser?._id)

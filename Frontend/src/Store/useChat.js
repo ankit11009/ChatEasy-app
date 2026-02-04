@@ -62,6 +62,30 @@ export const useChatStore= create((set,get)=>({
             set({isMessageLoading:false})
         }
     },
+    subscribeToMessages: () => {
+        const { selectedUser } = get();
+        if (!selectedUser) return;
+
+        // Get the socket from your useAuthStore
+        const socket = useAuthStore.getState().socket;
+
+        // Listen for the "newMessage" event
+        socket.on("newMessage", (newMessage) => {
+            // Check if the message belongs to the current open chat
+            const isMessageFromSelectedUser = newMessage.senderId === selectedUser._id;
+            if (!isMessageFromSelectedUser) return;
+
+            // Add the new message to the state instantly
+            set({
+                messages: [...get().messages, newMessage],
+            });
+        });
+    },
+
+    unsubscribeFromMessages: () => {
+        const socket = useAuthStore.getState().socket;
+        socket.off("newMessage");
+    },
     // which ever the user seleceted we are sending that id from selectedUser
     sendMessage:async(messageData)=>{
         const {selectedUser,messages}=get()

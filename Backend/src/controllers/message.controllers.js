@@ -82,10 +82,9 @@ const sendMessage=asyncHandler(async(req,res)=>{
 
     const receiverSocketId = getReceiverSocketId(receiverId);
     if (receiverSocketId) {
-      // io.to(socketId).emit sends to a specific user
+      // Send the message directly to the receiver's socket
       io.to(receiverSocketId).emit("newMessage", newMessage);
     }
-
      
     
 
