@@ -12,7 +12,7 @@ const app = express()
 
 
 app.use(cors({
-  origin:process.env.CORS_ORIGIN,
+  origin:"https://chat-easy-app.vercel.app",
   credentials: true,
   methods: ["GET", "POST", "DELETE", "OPTIONS", "PATCH"],
   allowedHeaders: ["Content-Type", "Authorization"]
