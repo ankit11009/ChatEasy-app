@@ -6,10 +6,12 @@ import { socketAuthMiddleware } from "../middleware/socket.auth.middleware.js"
 import { app } from "../app.js"
 
 
-const server=http.createServer(app)
+// const server=http.createServer(app)
+
+const BACKEND_URL = "https://chateasy-app.onrender.com";
 
 
-const io=new Server(server,{
+const io=new Server(BACKEND_URL,{
     cors:{
         origin:process.env.CORS_ORIGIN,
         credentials:true,
