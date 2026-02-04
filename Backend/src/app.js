@@ -8,7 +8,7 @@ import 'dotenv/config'
 
 
 
-const app = express(
+const app = express()
 
 
 app.use(cors({
@@ -16,7 +16,7 @@ app.use(cors({
   credentials: true,
   methods: ["GET", "POST", "DELETE", "OPTIONS", "PATCH"],
   allowedHeaders: ["Content-Type", "Authorization"]
-}));
+}))
 
 
 
