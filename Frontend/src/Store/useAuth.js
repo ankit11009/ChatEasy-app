@@ -72,7 +72,7 @@ signup: async (data) => {
     try {
         const res = await axiosInstance.post("/auth/login", data);
         
-        // Add a safety check before destructuring
+        
         if (res?.data?.data) {
             const { existedUser, accessToken } = res.data.data;
 
