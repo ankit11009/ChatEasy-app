@@ -1,4 +1,5 @@
 import express from "express"
+import { getReceiverSocketId, io } from "../lib/socket.js";
 import { asyncHandler } from "../utils/asyncHandler.js"
 import { apiError } from "../utils/apiError.js"
 import apiResponse from "../utils/apiResponse.js"
@@ -78,7 +79,13 @@ const sendMessage=asyncHandler(async(req,res)=>{
 
     })
     await newMessage.save()
-    console.log("message:",newMessage);
+
+    const receiverSocketId = getReceiverSocketId(receiverId);
+    if (receiverSocketId) {
+      // io.to(socketId).emit sends to a specific user
+      io.to(receiverSocketId).emit("newMessage", newMessage);
+    }
+
      
     
 
